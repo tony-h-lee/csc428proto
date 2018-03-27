@@ -1,7 +1,46 @@
+const IMAGE_PATH = "./image-app/src/assets/Photos/";
+
+// Contains the filenames of all the images used for classification
+const imageList = [
+	'4KK2_20150823_152106_985',
+	'4KK2_20150829_162922_083',
+	'4KK2_20150906_172222_214',
+	'4KK2_20150910_131804_951',
+	'4KK2_20150910_145708_024',
+	'4WBR_20150516_112748_501',
+	'4WBR_20150516_120057_166',
+	'5a9e_20141005_140124_873',
+	'5a9e_20141006_102246_788',
+	'5a9e_20141007_135000_213'
+];
+
 $(window).on("load", function() {
   // Please run it with window.onload, not with document.ready
 
   // THERE MUST BE AN EQUAL NUMBER OF IMAGES IN BOTH STRIPS FOR SMOOTH ANIMATION
+
+  // INITIALIZATION
+  // - Read in all images in the image directory
+  // - Create left and right strip containers
+  // - Loop through all images and create equal number of image divs for each strip
+  imageList.map((image, index) => {
+  	if (index === 0) {
+  		$('.left-block>.animation').append(
+  		'<div class="first"> <img width="300" height="300" src="'+imageFile(image)+'"> </div>'
+  		)
+  		$('.right-block>.animation').append(
+  		'<div class="first"> <img width="300" height="300" src="'+imageFile(image)+'"> </div>'
+  		)
+  	} else {
+  		$('.left-block>.animation').append(
+  		'<div> <img width="300" height="300" src="'+imageFile(image)+'" /> </div>'
+  		)
+  		$('.right-block>.animation').append(
+  		'<div> <img width="300" height="300" src="'+imageFile(image)+'" /> </div>'
+  		)
+  	}
+  });
+
 
   // Apply to left strip
   initSmoothScrolling(".left-block", "smoothscrollup", false);
@@ -10,6 +49,10 @@ $(window).on("load", function() {
   initSmoothScrolling(".right-block", "smoothscrolldown", true);
 
 });
+
+function imageFile(filename) {
+	return IMAGE_PATH + filename + '.jpg';
+}
 
 function initSmoothScrolling(container, animation, isMovingDown) {
   /*

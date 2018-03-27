@@ -55,16 +55,16 @@ table {
 
 .left-block, .right-block {
 	position: absolute;
-  width: 200px;
+  width: 300px;
   background: #fff;
 }
 
 .left-block {
-	left: calc(50% - 6.45rem);
+	left: calc(50% - 9.55rem);
 	transform: translateX(-50%);
 }
 .right-block {
-	left: calc(50% + 6.45rem);;
+	left: calc(50% + 9.55rem);;
 	transform: translateX(-50%);
 }
 .animation {
@@ -75,7 +75,7 @@ table {
 .animation div {
   display: block;
   width: auto;
-  max-width: 200%;
+  max-width: 300px;
   float: none;
   padding: 0.15rem 0;
 }
