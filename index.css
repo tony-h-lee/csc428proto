@@ -71,6 +71,7 @@ table {
 .animation div {
   display: block;
   width: auto;
+  max-width: 200%;
   float: none;
-  padding: 0 10px;
+  padding: 0.1rem 0;
 }
