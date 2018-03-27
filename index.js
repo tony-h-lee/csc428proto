@@ -1,6 +1,8 @@
 $(window).on("load", function() {
   // Please run it with window.onload, not with document.ready
 
+  // THERE MUST BE AN EQUAL NUMBER OF IMAGES IN BOTH STRIPS FOR SMOOTH ANIMATION
+
   // Apply to left strip
   initSmoothScrolling(".left-block", "smoothscrollup", false);
 
@@ -14,18 +16,23 @@ function initSmoothScrolling(container, animation, isMovingDown) {
 	* @param {String} container Class or ID of the animation container
 	* @param {String} animation Name of the animation, e.g. smoothscroll
 	*/
-  var sliderWidth = 0;
+  var sliderWidth = $(">div>div:first-of-type", container).outerWidth(false);
   var animationHeight = 0;
-  var sliderHeight = $(">div>div:first-of-type", container).outerHeight(false);
+  var sliderHeight = 0;
 
   $(">div>div", container).each(function() {
     animationHeight += $(this).outerHeight(false);
   });
 
+  // Detect the slider height with appended tail
+  $(">div>div", container).each(function() {
+    sliderHeight += $(this).outerHeight(false);
+  });
+
   // detect number of visible slides
   var slidesVisible =
-    $(container).height() /
-    $(">div>div:first-of-type", container).outerWidth(false);
+    sliderHeight /
+    $(">div>div:first-of-type", container).outerHeight(false);
   slidesVisible = Math.ceil(slidesVisible);
 
   // count slides to determine animation speed
@@ -40,15 +47,8 @@ function initSmoothScrolling(container, animation, isMovingDown) {
     .clone()
     .appendTo($(">div", container));
 
-  // Detect the slider height with appended tail
-  $(">div>div", container).each(function() {
-    sliderWidth += $(this).outerHeight(false);
-  });
-
   // set slider dimensions
   $(">div", container).css({ width: sliderWidth, height: sliderHeight });
-
-  console.log( $(">div>div:first-of-type", container))
 
   // Slides moving down animation
   if (isMovingDown) {
