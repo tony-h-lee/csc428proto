@@ -14,6 +14,9 @@ const imageList = [
 	'5a9e_20141007_135000_213'
 ];
 
+
+// ----------------------------- MAIN METHOD -----------------------------
+
 $(window).on("load", function() {
   // Please run it with window.onload, not with document.ready
 
@@ -21,26 +24,17 @@ $(window).on("load", function() {
 
   // INITIALIZATION
   // - Read in all images in the image directory
-  // - Create left and right strip containers
-  // - Loop through all images and create equal number of image divs for each strip
+  // - Append slide elements in strip containers
+
   imageList.map((image, index) => {
   	if (index === 0) {
-  		$('.left-block>.animation').append(
-  		'<div class="first"> <img width="300" height="300" src="'+imageFile(image)+'"> </div>'
-  		)
-  		$('.right-block>.animation').append(
-  		'<div class="first"> <img width="300" height="300" src="'+imageFile(image)+'"> </div>'
-  		)
+  		generateImageSlide('.left-block', imageFile(image), true)
+  		generateImageSlide('.right-block', imageFile(image), true)
   	} else {
-  		$('.left-block>.animation').append(
-  		'<div> <img width="300" height="300" src="'+imageFile(image)+'" /> </div>'
-  		)
-  		$('.right-block>.animation').append(
-  		'<div> <img width="300" height="300" src="'+imageFile(image)+'" /> </div>'
-  		)
+  		generateImageSlide('.left-block', imageFile(image), false)
+  		generateImageSlide('.right-block', imageFile(image), false)
   	}
   });
-
 
   // Apply to left strip
   initSmoothScrolling(".left-block", "smoothscrollup", false);
@@ -50,10 +44,31 @@ $(window).on("load", function() {
 
 });
 
+// ----------------------------- HELPER FUNCTION -----------------------------
+// Create an img DOM element with the src pointing to imagePath.
+function generateImageElement(imagePath) {
+	return '<div class="first"> <img width="300" height="300" src="'+imagePath+'"> </div>';
+}
+
+
+// ----------------------------- HELPER FUNCTION -----------------------------
+// Return the relative image path given filename
 function imageFile(filename) {
 	return IMAGE_PATH + filename + '.jpg';
 }
 
+// ----------------------------- CONSTRUCTOR FUNCTION -----------------------------
+// Create an image slide element within the strip container.
+// - If isFirstIndex, then set a class first
+// - Attach EVENT HANDLERS here
+function generateImageSlide(container, imagePath, isFirstIndex) {
+	$(container+'>.animation')
+  	.append(generateImageElement(imagePath))
+}
+
+
+// ----------------------------- CONSTRUCTOR FUNCTION -----------------------------
+// Begin the sliding animation for elements within container
 function initSmoothScrolling(container, animation, isMovingDown) {
   /*
 	* @param {String} container Class or ID of the animation container
