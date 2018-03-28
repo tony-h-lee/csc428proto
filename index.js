@@ -11,7 +11,11 @@ var imageList = [
 	'4WBR_20150516_120057_166',
 	'5a9e_20141005_140124_873',
 	'5a9e_20141006_102246_788',
-	'5a9e_20141007_135000_213'
+	'5a9e_20141007_135000_213',
+	'JN34_20150328_181324_374',
+	'JN34_20150319_183334_317',
+	'J6ZC_20150408_183238_027',
+	'J6ZC_20150408_183124_341',
 ];
 
 var end = imageList.length;
@@ -121,7 +125,7 @@ function initSmoothScrolling(container, animation, isMovingDown) {
   var slidesNumber = $(">div>div", container).not('.cloned').length;
 
   // Greater speed value => slower moving images
-  var speed = 23;
+  var speed = 30;
 
   // append the tail
   $(">div>div", container)
