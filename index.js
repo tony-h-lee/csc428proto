@@ -1,7 +1,7 @@
-const IMAGE_PATH = "./image-app/src/assets/Photos/";
+var IMAGE_PATH = "./image-app/src/assets/Photos/";
 
 // Contains the filenames of all the images used for classification
-const imageList = [
+var imageList = [
 	'4KK2_20150823_152106_985',
 	'4KK2_20150829_162922_083',
 	'4KK2_20150906_172222_214',
@@ -14,7 +14,7 @@ const imageList = [
 	'5a9e_20141007_135000_213'
 ];
 
-const end = imageList.length;
+var end = imageList.length;
 
 
 // ----------------------------- MAIN METHOD -----------------------------
@@ -27,17 +27,13 @@ $(window).on("load", function() {
   // INITIALIZATION
   // - Read in all images in the image directory
   // - Append slide elements in strip containers
+  // - REQUIRES EVEN NUMBER OF IMAGE LIST
 
   imageList.map((image, index) => {
-  	if (index === 0) {
-  		generateImageSlide('.left-block', imageFile(image), image, true)
-  	}
-  	else if (index === 1) {
-  		generateImageSlide('.right-block', imageFile(image), image, true)
-  	} else if (index % 2 === 0) {
-  		generateImageSlide('.left-block', imageFile(image), image, false)
+  	if (index % 2 === 0) {
+  		generateImageSlide('.left-block', imageFile(image), image)
   	} else {
-  		generateImageSlide('.right-block', imageFile(image), image, false)
+  		generateImageSlide('.right-block', imageFile(image), image)
   	}
   });
 
@@ -66,19 +62,30 @@ function imageFile(filename) {
 // Create an image slide element within the strip container.
 // - If isFirstIndex, then set a class first
 // - Attach EVENT HANDLERS here
-function generateImageSlide(container, imagePath, imageId, isFirstIndex) {
+function generateImageSlide(container, imagePath, imageId) {
 	$(container+'>.animation')
   	.append(generateImageElement(imagePath, imageId))
 }
 
 // Remove image from slide and recalculate circular animation
-var iter = 0;
 function removeFromSlide(container, imageId) {
-	$(`[data-image='${imageId}']:not(#picture)`).parent().css({'visibility': 'hidden'});
-	iter += 1;
-	if (iter === end) {
-		alert('Categorization Finished!');
-	}
+	$('.left-block div').empty();
+	$('.right-block div').empty();
+
+	imageList = imageList.filter((image => image !== imageId));
+	imageList.map((image, index) => {
+  	if (index % 2 === 0) {
+  		generateImageSlide('.left-block', imageFile(image), image)
+  	} else {
+  		generateImageSlide('.right-block', imageFile(image), image)
+  	}
+  });
+
+  // Apply to left strip
+  initSmoothScrolling(".left-block", "smoothscrollup", false);
+
+  // Apply to right strip
+  initSmoothScrolling(".right-block", "smoothscrolldown", true);
 }
 
 
@@ -114,7 +121,7 @@ function initSmoothScrolling(container, animation, isMovingDown) {
   var slidesNumber = $(">div>div", container).not('.cloned').length;
 
   // Greater speed value => slower moving images
-  var speed = slidesNumber ** 2.1;
+  var speed = 23;
 
   // append the tail
   $(">div>div", container)
@@ -126,67 +133,76 @@ function initSmoothScrolling(container, animation, isMovingDown) {
 
   // set slider dimensions
   $(">div", container).css({ width: sliderWidth, height: sliderHeight });
-
   // Slides moving down animation
-  if (isMovingDown) {
-		$(
-		  "<style type='text/css'>@keyframes " +
-		    animation +
-		    " { 100% { margin-top: 0px; } 0% { margin-top: -" +
-		    animationHeight +
-		    "px; } } .left-block >div>div:first-of-type " +
-		    " { -webkit-animation: " +
-		    animation +
-		    " " +
-		    speed +
-		    "s linear infinite; -moz-animation: " +
-		    animation +
-		    " " +
-		    speed +
-		    "s linear infinite; -ms-animation: " +
-		    animation +
-		    " " +
-		    speed +
-		    "s linear infinite; -o-animation: " +
-		    animation +
-		    " " +
-		    speed +
-		    "s linear infinite; animation: " +
-		    animation +
-		    " " +
-		    speed +
-		    "s linear infinite; }</style>"
-		).appendTo("head");
+  if (!isMovingDown) {
+  	$("#circUp").remove()
+  	if($(">div>div", container).length > 2) {
+			$(
+			  "<style id='circUp' type='text/css'>@keyframes " +
+			    animation +
+			    " { 100% { margin-top: 0px; } 0% { margin-top: -" +
+			    animationHeight +
+			    "px; } } .left-block >div>div:first-of-type " +
+			    " { -webkit-animation: " +
+			    animation +
+			    " " +
+			    speed +
+			    "s linear infinite; -moz-animation: " +
+			    animation +
+			    " " +
+			    speed +
+			    "s linear infinite; -ms-animation: " +
+			    animation +
+			    " " +
+			    speed +
+			    "s linear infinite; -o-animation: " +
+			    animation +
+			    " " +
+			    speed +
+			    "s linear infinite; animation: " +
+			    animation +
+			    " " +
+			    speed +
+			    "s linear infinite; }</style>"
+			).appendTo("head");
+		} else {
+			$(">div>div.cloned", container).remove();
+		}
 	} else {
 	  // Slides moving up animation
-	  $(
-	    "<style type='text/css'>@keyframes " +
-	      animation +
-	      " { 0% { margin-top: 0px; } 100% { margin-top: -" +
-	      animationHeight +
-	      "px; } } .right-block >div>div:first-of-type " +
-	      " { -webkit-animation: " +
-	      animation +
-	      " " +
-	      speed +
-	      "s linear infinite; -moz-animation: " +
-	      animation +
-	      " " +
-	      speed +
-	      "s linear infinite; -ms-animation: " +
-	      animation +
-	      " " +
-	      speed +
-	      "s linear infinite; -o-animation: " +
-	      animation +
-	      " " +
-	      speed +
-	      "s linear infinite; animation: " +
-	      animation +
-	      " " +
-	      speed +
-	      "s linear infinite; }</style>"
-	  ).appendTo("head");
+	  $("#circDown").remove()
+	  if($(">div>div", container).length > 2) {
+		  $(
+		    "<style id='circDown' type='text/css'>@keyframes " +
+		      animation +
+		      " { 0% { margin-top: 0px; } 100% { margin-top: -" +
+		      animationHeight +
+		      "px; } } .right-block >div>div:first-of-type " +
+		      " { -webkit-animation: " +
+		      animation +
+		      " " +
+		      speed +
+		      "s linear infinite; -moz-animation: " +
+		      animation +
+		      " " +
+		      speed +
+		      "s linear infinite; -ms-animation: " +
+		      animation +
+		      " " +
+		      speed +
+		      "s linear infinite; -o-animation: " +
+		      animation +
+		      " " +
+		      speed +
+		      "s linear infinite; animation: " +
+		      animation +
+		      " " +
+		      speed +
+		      "s linear infinite; }</style>"
+		  ).appendTo("head");
+		} else {
+			$(">div>div.cloned", container).remove();
+		}
 	}
 
   // restart the animation (e.g. for safari & ie)
@@ -228,7 +244,7 @@ function classifyImage(button) {
 	var picture = document.getElementById("picture");
 	var source = picture.src.split("/");
 	var pictureSource = source[source.length - 1].split(".")[0];
-	results.push({key: button.name, value: pictureSource});
+	results.push({category: button.name, file: pictureSource});
 	var modal = document.getElementById("modal-container");
 	modal.style.display = "none";
 	removeFromSlide(picture.dataset.strip, pictureSource);
