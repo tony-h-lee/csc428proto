@@ -125,7 +125,7 @@ function initSmoothScrolling(container, animation, isMovingDown) {
   var slidesNumber = $(">div>div", container).not('.cloned').length;
 
   // Greater speed value => slower moving images
-  var speed = 30;
+  var speed = 45;
 
   // append the tail
   $(">div>div", container)
