@@ -192,3 +192,18 @@ function closeModal() {
 	var modal = document.getElementById("modal-container");
 	modal.style.display = "none";
 }
+
+// Data struct for classifications
+var results = [];
+
+// Class button functions
+function classifyImage(button) {
+	var picture = document.getElementById("picture");
+	var source = picture.src.split("/");
+	var pictureSource = source[source.length - 1].split(".")[0];
+	results.push({key: button.name, value: pictureSource});
+	var modal = document.getElementById("modal-container");
+	modal.style.display = "none";
+	// imageList.splice(imageList.indexOf(pictureSource), 1);
+	console.log(results);
+}
