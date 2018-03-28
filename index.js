@@ -28,11 +28,12 @@ $(window).on("load", function() {
 
   imageList.map((image, index) => {
   	if (index === 0) {
-  		generateImageSlide('.left-block', imageFile(image), true)
-  		generateImageSlide('.right-block', imageFile(image), true)
+  		generateImageSlide('.left-block', imageFile(image), image, true)
+  		generateImageSlide('.right-block', imageFile(image), image, true)
+  	} else if (index % 2 === 0) {
+  		generateImageSlide('.left-block', imageFile(image), image, false)
   	} else {
-  		generateImageSlide('.left-block', imageFile(image), false)
-  		generateImageSlide('.right-block', imageFile(image), false)
+  		generateImageSlide('.right-block', imageFile(image), image, false)
   	}
   });
 
@@ -46,8 +47,8 @@ $(window).on("load", function() {
 
 // ----------------------------- HELPER FUNCTION -----------------------------
 // Create an img DOM element with the src pointing to imagePath.
-function generateImageElement(imagePath) {
-	return '<div class="first"> <img width="300" height="300" src="'+imagePath+'" onclick=selectImage(this)> </div>';
+function generateImageElement(imagePath, imageId) {
+	return '<div class="first"> <img width="300" height="300" id="'+imageId+'" src="'+imagePath+'" onclick=selectImage(this)> </div>';
 }
 
 
@@ -61,9 +62,13 @@ function imageFile(filename) {
 // Create an image slide element within the strip container.
 // - If isFirstIndex, then set a class first
 // - Attach EVENT HANDLERS here
-function generateImageSlide(container, imagePath, isFirstIndex) {
+function generateImageSlide(container, imagePath, imageId, isFirstIndex) {
 	$(container+'>.animation')
-  	.append(generateImageElement(imagePath))
+  	.append(generateImageElement(imagePath, imageId))
+}
+
+function removeFromSlide(imageId) {
+	document.getElementById(imageId).remove();
 }
 
 
@@ -199,10 +204,13 @@ var results = [];
 // Class button functions
 function classifyImage(button) {
 	var picture = document.getElementById("picture");
+	console.log(picture);
 	var source = picture.src.split("/");
 	var pictureSource = source[source.length - 1].split(".")[0];
 	results.push({key: button.name, value: pictureSource});
 	var modal = document.getElementById("modal-container");
 	modal.style.display = "none";
+	removeFromSlide(pictureSource);
 	console.log(results);
 }
+
