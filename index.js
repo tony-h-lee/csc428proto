@@ -47,7 +47,7 @@ $(window).on("load", function() {
 // ----------------------------- HELPER FUNCTION -----------------------------
 // Create an img DOM element with the src pointing to imagePath.
 function generateImageElement(imagePath) {
-	return '<div class="first"> <img width="300" height="300" src="'+imagePath+'"> </div>';
+	return '<div class="first"> <img width="300" height="300" src="'+imagePath+'" onclick=selectImage(this)> </div>';
 }
 
 
@@ -177,4 +177,18 @@ function initSmoothScrolling(container, animation, isMovingDown) {
     .animate({ nothing: null }, 1, function() {
       $(this).addClass(cl);
     });
+}
+
+// Brings up modal when clicking image
+function selectImage(image) {
+	var modal = document.getElementById("modal-container");
+	var picture = document.getElementById("picture");
+	picture.src = image.src;
+	modal.style.display = "block";
+}
+
+// Closes modal
+function closeModal() {
+	var modal = document.getElementById("modal-container");
+	modal.style.display = "none";
 }
