@@ -204,6 +204,5 @@ function classifyImage(button) {
 	results.push({key: button.name, value: pictureSource});
 	var modal = document.getElementById("modal-container");
 	modal.style.display = "none";
-	// imageList.splice(imageList.indexOf(pictureSource), 1);
 	console.log(results);
 }
