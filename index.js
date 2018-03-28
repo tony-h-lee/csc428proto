@@ -14,6 +14,8 @@ const imageList = [
 	'5a9e_20141007_135000_213'
 ];
 
+const end = imageList.length;
+
 
 // ----------------------------- MAIN METHOD -----------------------------
 
@@ -70,12 +72,12 @@ function generateImageSlide(container, imagePath, imageId, isFirstIndex) {
 }
 
 // Remove image from slide and recalculate circular animation
+var iter = 0;
 function removeFromSlide(container, imageId) {
-	$(`[data-image='${imageId}']:not(#picture)`).parent().remove();
-	if(container === '.right-block') {
-		initSmoothScrolling(".right-block", "smoothscrolldown", true);
-	} else {
-		initSmoothScrolling(".left-block", "smoothscrollup", false);
+	$(`[data-image='${imageId}']:not(#picture)`).parent().css({'visibility': 'hidden'});
+	iter += 1;
+	if (iter === end) {
+		alert('Categorization Finished!');
 	}
 }
 
@@ -91,7 +93,7 @@ function initSmoothScrolling(container, animation, isMovingDown) {
   var animationHeight = 0;
   var sliderHeight = 0;
 
-  console.log($(`${container}`).children().children())
+  $(">div>div.cloned", container).remove();
 
   $(">div>div", container).not('.cloned').each(function() {
     animationHeight += $(this).outerHeight(false);
@@ -109,10 +111,10 @@ function initSmoothScrolling(container, animation, isMovingDown) {
   slidesVisible = Math.ceil(slidesVisible);
 
   // count slides to determine animation speed
-  var slidesNumber = $(">div>div", container).length;
+  var slidesNumber = $(">div>div", container).not('.cloned').length;
 
   // Greater speed value => slower moving images
-  var speed = 20;
+  var speed = slidesNumber ** 2.1;
 
   // append the tail
   $(">div>div", container)
