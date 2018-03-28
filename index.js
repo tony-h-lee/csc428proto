@@ -69,8 +69,14 @@ function generateImageSlide(container, imagePath, imageId, isFirstIndex) {
   	.append(generateImageElement(imagePath, imageId))
 }
 
-function removeFromSlide(imageId) {
-	$(`[data-image='${imageId}']:not(#picture)`).css({'visibility': 'hidden'});
+// Remove image from slide and recalculate circular animation
+function removeFromSlide(container, imageId) {
+	$(`[data-image='${imageId}']:not(#picture)`).parent().remove();
+	if(container === '.right-block') {
+		initSmoothScrolling(".right-block", "smoothscrolldown", true);
+	} else {
+		initSmoothScrolling(".left-block", "smoothscrollup", false);
+	}
 }
 
 
@@ -85,12 +91,14 @@ function initSmoothScrolling(container, animation, isMovingDown) {
   var animationHeight = 0;
   var sliderHeight = 0;
 
-  $(">div>div", container).each(function() {
+  console.log($(`${container}`).children().children())
+
+  $(">div>div", container).not('.cloned').each(function() {
     animationHeight += $(this).outerHeight(false);
   });
 
   // Detect the slider height with appended tail
-  $(">div>div", container).each(function() {
+  $(">div>div", container).not('.cloned').each(function() {
     sliderHeight += $(this).outerHeight(false);
   });
 
@@ -104,12 +112,13 @@ function initSmoothScrolling(container, animation, isMovingDown) {
   var slidesNumber = $(">div>div", container).length;
 
   // Greater speed value => slower moving images
-  var speed = slidesNumber ** 2.1;
+  var speed = 20;
 
   // append the tail
   $(">div>div", container)
     .slice(0, slidesVisible)
     .clone()
+    .addClass('cloned')
     .appendTo($(">div", container));
 
 
@@ -187,11 +196,18 @@ function initSmoothScrolling(container, animation, isMovingDown) {
     });
 }
 
+// Return the class name of the strip container containing this selected image
+function getStripContainer(selectedImage) {
+ return selectedImage.parentNode.parentNode.parentNode.className.split(" ")[0];
+}
+
 // Brings up modal when clicking image
 function selectImage(image) {
+	var stripContainer = getStripContainer(image);
 	var modal = document.getElementById("modal-container");
 	var picture = document.getElementById("picture");
 	picture.src = image.src;
+	picture.dataset.strip = stripContainer;
 	picture.dataset.image = image.dataset.image;
 	modal.style.display = "block";
 }
@@ -213,7 +229,7 @@ function classifyImage(button) {
 	results.push({key: button.name, value: pictureSource});
 	var modal = document.getElementById("modal-container");
 	modal.style.display = "none";
-	removeFromSlide(pictureSource);
+	removeFromSlide(picture.dataset.strip, pictureSource);
 	console.log(results);
 }
 
