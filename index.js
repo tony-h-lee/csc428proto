@@ -29,6 +29,8 @@ $(window).on("load", function() {
   imageList.map((image, index) => {
   	if (index === 0) {
   		generateImageSlide('.left-block', imageFile(image), image, true)
+  	}
+  	else if (index === 1) {
   		generateImageSlide('.right-block', imageFile(image), image, true)
   	} else if (index % 2 === 0) {
   		generateImageSlide('.left-block', imageFile(image), image, false)
@@ -105,10 +107,12 @@ function initSmoothScrolling(container, animation, isMovingDown) {
   var speed = slidesNumber ** 2.1;
 
   // append the tail
+  console.log(slidesVisible);
   $(">div>div", container)
     .slice(0, slidesVisible)
     .clone()
     .appendTo($(">div", container));
+
 
   // set slider dimensions
   $(">div", container).css({ width: sliderWidth, height: sliderHeight });
