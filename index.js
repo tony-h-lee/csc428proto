@@ -50,7 +50,7 @@ $(window).on("load", function() {
 // ----------------------------- HELPER FUNCTION -----------------------------
 // Create an img DOM element with the src pointing to imagePath.
 function generateImageElement(imagePath, imageId) {
-	return '<div class="first"> <img width="300" height="300" id="'+imageId+'" src="'+imagePath+'" onclick=selectImage(this)> </div>';
+	return '<div> <img width="300" height="300" data-image="'+imageId+'" src="'+imagePath+'" onclick=selectImage(this)> </div>';
 }
 
 
@@ -70,7 +70,7 @@ function generateImageSlide(container, imagePath, imageId, isFirstIndex) {
 }
 
 function removeFromSlide(imageId) {
-	document.getElementById(imageId).remove();
+	$(`[data-image='${imageId}']:not(#picture)`).css({'visibility': 'hidden'});
 }
 
 
@@ -107,7 +107,6 @@ function initSmoothScrolling(container, animation, isMovingDown) {
   var speed = slidesNumber ** 2.1;
 
   // append the tail
-  console.log(slidesVisible);
   $(">div>div", container)
     .slice(0, slidesVisible)
     .clone()
@@ -193,6 +192,7 @@ function selectImage(image) {
 	var modal = document.getElementById("modal-container");
 	var picture = document.getElementById("picture");
 	picture.src = image.src;
+	picture.dataset.image = image.dataset.image;
 	modal.style.display = "block";
 }
 
@@ -208,7 +208,6 @@ var results = [];
 // Class button functions
 function classifyImage(button) {
 	var picture = document.getElementById("picture");
-	console.log(picture);
 	var source = picture.src.split("/");
 	var pictureSource = source[source.length - 1].split(".")[0];
 	results.push({key: button.name, value: pictureSource});
