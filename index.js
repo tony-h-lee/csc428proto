@@ -41,6 +41,8 @@ $(window).on("load", function() {
   	}
   });
 
+  $(document).on('keydown', escModal);
+
   // Apply to left strip
   initSmoothScrolling(".left-block", "smoothscrollup", false);
 
@@ -48,6 +50,12 @@ $(window).on("load", function() {
   initSmoothScrolling(".right-block", "smoothscrolldown", true);
 
 });
+
+function escModal(event) {
+	if (event.key == 'Escape') {
+		closeModal();
+	}
+}
 
 // ----------------------------- HELPER FUNCTION -----------------------------
 // Create an img DOM element with the src pointing to imagePath.
