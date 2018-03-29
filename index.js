@@ -1,4 +1,4 @@
-var IMAGE_PATH = "./image-app/src/assets/Photos/";
+var IMAGE_PATH = "./Photos/";
 
 // Contains the filenames of all the images used for classification
 var imageList = [
