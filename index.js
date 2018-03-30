@@ -24,6 +24,7 @@ var end = imageList.length;
 // ----------------------------- MAIN METHOD -----------------------------
 
 $(window).on("load", function() {
+
   // THERE MUST BE AN EQUAL NUMBER OF IMAGES IN BOTH STRIPS FOR SMOOTH ANIMATION
 
   // INITIALIZATION
@@ -39,6 +40,8 @@ $(window).on("load", function() {
   	}
   });
 
+  $(document).on('keydown', escModal);
+
   // Apply to left strip
   initSmoothScrolling(".left-block", "smoothscrollup", false);
 
@@ -46,6 +49,12 @@ $(window).on("load", function() {
   initSmoothScrolling(".right-block", "smoothscrolldown", true);
 
 });
+
+function escModal(event) {
+	if (event.key == 'Escape') {
+		closeModal();
+	}
+}
 
 // ----------------------------- HELPER FUNCTION -----------------------------
 // Create an img DOM element with the src pointing to imagePath.
@@ -70,9 +79,6 @@ function generateImageSlide(container, imagePath, imageId) {
 }
 
 // Remove image from slide and recalculate circular animation
-// Retrieved and adapted from Codepen 
-// by Captain Anonymous on 03/21/18
-// https://codepen.io/anon/pen/KoyqVZ
 function removeFromSlide(container, imageId) {
 	$('.left-block div').empty();
 	$('.right-block div').empty();
@@ -96,7 +102,9 @@ function removeFromSlide(container, imageId) {
 
 // ----------------------------- CONSTRUCTOR FUNCTION -----------------------------
 // Begin the sliding animation for elements within container
-//
+// Retrieved and adapted from Codepen 
+// by Captain Anonymous on 03/21/18
+// https://codepen.io/anon/pen/KoyqVZ
 function initSmoothScrolling(container, animation, isMovingDown) {
   /*
 	* @param {String} container Class or ID of the animation container
@@ -140,7 +148,7 @@ function initSmoothScrolling(container, animation, isMovingDown) {
   // set slider dimensions
   $(">div", container).css({ width: sliderWidth, height: sliderHeight });
   // Slides moving down animation
-  if (!isMovingDown) {	
+  if (!isMovingDown) {
   	$("#circUp").remove()
   	if($(">div>div", container).length > 2) {
 			$(
@@ -256,4 +264,3 @@ function classifyImage(button) {
 	removeFromSlide(picture.dataset.strip, pictureSource);
 	console.log(results);
 }
-
